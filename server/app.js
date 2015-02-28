@@ -1,5 +1,5 @@
 var express = require('express');
-var db = require('./db');
+// var db = require('./db');
 var cors = require('cors');
 
 // Middleware
@@ -24,7 +24,7 @@ app.use(cors());
 app.use("/classes", router);
 
 // Serve the client files
-app.use(express.static(__dirname + "/../client"));
+app.use(express.static(__dirname + "/../client/client"));
 
 // If we are being run directly, run the server.
 if (!module.parent) {

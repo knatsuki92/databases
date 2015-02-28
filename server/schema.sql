@@ -18,6 +18,7 @@ USE chat;
 
 
 
+
 -- ---
 -- Globals
 -- ---
@@ -47,9 +48,9 @@ DROP TABLE IF EXISTS `messages`;
 
 CREATE TABLE `messages` (
   `id` INTEGER NULL AUTO_INCREMENT DEFAULT NULL,
-  `message` VARCHAR(140) NULL DEFAULT NULL,
   `roomname` VARCHAR(20) NULL DEFAULT NULL,
-  `user` INTEGER NULL DEFAULT NULL,
+  `message` VARCHAR(140) NULL DEFAULT NULL,
+  `username` VARCHAR(20) NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
 );
 
@@ -57,7 +58,6 @@ CREATE TABLE `messages` (
 -- Foreign Keys
 -- ---
 
-ALTER TABLE `messages` ADD FOREIGN KEY (user) REFERENCES `users` (`id`);
 
 -- ---
 -- Table Properties
@@ -72,6 +72,67 @@ ALTER TABLE `messages` ADD FOREIGN KEY (user) REFERENCES `users` (`id`);
 
 -- INSERT INTO `users` (`id`,`username`) VALUES
 -- ('','');
--- INSERT INTO `messages` (`id`,`message`,`roomname`,`user`) VALUES
+-- INSERT INTO `messages` (`id`,`roomname`,`message`,`username`) VALUES
 -- ('','','','');
+
+
+
+
+
+-- -- ---
+-- -- Globals
+-- -- ---
+
+-- -- SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
+-- -- SET FOREIGN_KEY_CHECKS=0;
+
+-- -- ---
+-- -- Table 'users'
+-- --
+-- -- ---
+
+-- DROP TABLE IF EXISTS `users`;
+
+-- CREATE TABLE `users` (
+--   `id` INTEGER NULL AUTO_INCREMENT DEFAULT NULL,
+--   `username` VARCHAR(20) NULL DEFAULT NULL,
+--   PRIMARY KEY (`id`)
+-- );
+
+-- -- ---
+-- -- Table 'messages'
+-- --
+-- -- ---
+
+-- DROP TABLE IF EXISTS `messages`;
+
+-- CREATE TABLE `messages` (
+--   `id` INTEGER NULL AUTO_INCREMENT DEFAULT NULL,
+--   `message` VARCHAR(140) NULL DEFAULT NULL,
+--   `roomname` VARCHAR(20) NULL DEFAULT NULL,
+--   `user` INTEGER NULL DEFAULT NULL,
+--   PRIMARY KEY (`id`)
+-- );
+
+-- -- ---
+-- -- Foreign Keys
+-- -- ---
+
+-- ALTER TABLE `messages` ADD FOREIGN KEY (user) REFERENCES `users` (`id`);
+
+-- -- ---
+-- -- Table Properties
+-- -- ---
+
+-- -- ALTER TABLE `users` ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+-- -- ALTER TABLE `messages` ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+-- -- ---
+-- -- Test Data
+-- -- ---
+
+-- -- INSERT INTO `users` (`id`,`username`) VALUES
+-- -- ('','');
+-- -- INSERT INTO `messages` (`id`,`message`,`roomname`,`user`) VALUES
+-- -- ('','','','');
 

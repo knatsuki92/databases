@@ -2,8 +2,8 @@
   "name": "chatterbox",
   "version": "0.0.0",
   "dependencies": {
-    "underscore": "~1.8.2",
-    "jquery": "~2.0.3"
+    "jquery": "~2.0.3",
+    "underscore": "~1.7.0"
   },
   "ignore": [
     "**/.*",
@@ -11,10 +11,5 @@
     "bower_components",
     "test",
     "tests"
-  ],
-  "homepage": "https://github.com/rkho/2015-02-chatterbox-server",
-  "authors": [
-    "Hack Reactor Students <accounts@hackreactor.com>"
-  ],
-  "license": "MIT"
+  ]
 }
