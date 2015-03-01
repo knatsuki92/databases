@@ -1,54 +1,64 @@
 var models = require('../models');
 var bluebird = require('bluebird');
-
+var db = require('../db');
 
 module.exports = {
   messages: {
     get: function (req, res) {
-      models.messages.get( function(err, results) {
-        if(err) {
-          throw err;
-        }
-        else {
-          var data = {results: results};
-          console.log(data);
-          res.status(200).end(JSON.stringify(data));
-        }
-      });
+      db.Message.findAll({include: [db.User]})
+        .complete(function(err, results) {
+          if(err) {
+            throw err;
+          }
+          else {
+            var data = {results: results};
+            console.log(data);
+            res.status(200).end(JSON.stringify(data));
+          }
+        });
     }, // a function which handles a get request for all messages
     post: function (req, res) { // a function which handles posting a message to the database
-      var params = [req.body.text, req.body.roomname, req.body.username ];
-      models.messages.post(params, function(err, results) {
-        if(err) { throw err;
-        } else {
-          res.status(201).end();
+      db.User.findOrCreate({where: {username: req.body.username}})
+        .complete(function(err, results) {
+          db.Message.create({userid: results[0].dataValues.id,
+            message: req.body.text,
+            roomname: req.body.roomname
+          });
+        }).complete(function(err, results) {
+          if(err) { throw err;
+          } else {
+            res.status(201).end();
+          }
         }
-      });
+      );
     }
   },
 
   users: {
     // Ditto as above
     get: function (req, res) {
-      models.users.get(function(err, results) {
-        if(err) {
-          throw err;
+      db.User.findAll()
+        .complete(function(err, results) {
+          if(err) {
+            throw err;
+          }
+          else {
+            var data = {results: results};
+            console.log(data);
+            res.status(200).end(JSON.stringify(data));
+          }
         }
-        else {
-          var data = {results: results};
-          console.log(data);
-          res.status(200).end(JSON.stringify(data));
-        }
-      });
+      );
     }, // a function which handles a get request for all users
     post: function (req, res) {
-      var params = [req.body.username];
-      models.users.post(params, function(err, results) {
-        if(err) throw err;
-        else {
-          res.status(201).end();
+      db.User.create({username: req.body.username})
+        .complete(function(err, results) {
+          if(err) throw err;
+          else {
+            res.status(201).end();
+          }
         }
-      });
+      );
     }
   }
 };
