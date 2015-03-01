@@ -2,69 +2,28 @@ var db = require('../db');
 
 module.exports = {
   messages: {
-    get: function (req, res) {
-      db.query("SELECT message, roomname, username FROM messages", [], function(err, results) {
-        if(err) {
-          throw err;
-        }
-        else {
-          var data = {results: results};
-          console.log(data);
-          res.status(200).end(JSON.stringify(data));
-        }
-
-      });
-    }, // a function which produces all the messages
-    post: function (req, res) {
-      //get data from the request
-      var newMessage = req.body;
-      //post the data to our database
-      var values ="'" +  newMessage.text + "'" +  "," + "'" + newMessage.roomname + "'" + "," + "'" + newMessage.username + "'";
-
-      db.query("INSERT INTO messages\
-                (message, roomname, username)\
-                values (" + values + ")",
-                [],
-                function(err, result) {
-                  if(err) throw err;
-                  else {
-                    res.status(201).end();
-                  }
-                });
-      //send a response back to the user with the status code -- successful or not
-
-    } // a function which can be used to insert a message into the database
+    get: function (callback) {
+      var queryString = "SELECT messages.message, messages.roomname, users.username FROM messages\
+        left outer join users on (messages.user = users.id) order by messages.id";
+      db.query(queryString, callback);
+    },
+    post: function (params, callback) {
+      console.log(params);
+      var queryString = "INSERT INTO messages (message, roomname, user) \
+        values (?, ?, (select id from users where username = ? limit 1))";
+      db.query(queryString, params, callback);
+    }
   },
 
   users: {
     // Ditto as above.
-    get: function (req, res) {
-      db.query('SELECT username FROM users', [], function(err, results) {
-        if(err) {
-          throw err;
-        }
-        else {
-          var data = {results: results};
-          console.log(data);
-          res.status(200).end(JSON.stringify(data));
-        }
-
-      });
+    get: function (callback) {
+      db.query('SELECT username FROM users', [], callback);
     },
-    post: function (req, res) {
-      var newUser = req.body;
+    post: function (params, callback) {
       //post the data to our database
-      var values = "'" + newUser.username + "'";
-      db.query("INSERT INTO users\
-                (username)\
-                values ( " + values + ")",
-                [],
-                function(err, result) {
-                  if(err) throw err;
-                  else {
-                    res.status(201).end();
-                  }
-                });
+      var queryString = "insert into users(username) values (?)";
+      db.query(queryString, params, callback);
     }
   }
 };
